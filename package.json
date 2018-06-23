@@ -1,5 +1,5 @@
 {
-  "name": "good-kinesis",
+  "name": "good-kinesis-reporter",
   "version": "0.1.0",
   "description": "Kinesis (and Kinesis Firehose) broadcasting for Good process monitor",
   "main": "src/index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vvondra/good-kinesis.git"
+    "url": "git+https://github.com/vvondra/good-kinesis-reporter.git"
   },
   "keywords": [
     "good",
@@ -19,9 +19,9 @@
   "author": "Vojtech Vondra",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vvondra/good-kinesis/issues"
+    "url": "https://github.com/vvondra/good-kinesis-reporter/issues"
   },
-  "homepage": "https://github.com/vvondra/good-kinesis#readme",
+  "homepage": "https://github.com/vvondra/good-kinesis-reporter#readme",
   "dependencies": {
     "aws-sdk": "^2.263.1",
     "fast-safe-stringify": "^2.0.4"
