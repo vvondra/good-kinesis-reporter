@@ -1,5 +1,3 @@
-'use strict'
-
 const Stream = require('stream');
 const stringify = require('fast-safe-stringify');
 const crypto = require('crypto');
@@ -14,7 +12,7 @@ function serialize(data) {
     return data.toString('utf8');
   }
 
-  return stringify(data) + "\n";
+  return `${stringify(data)}\n`;
 }
 
 class GoodKinesis extends Stream.Writable {
@@ -33,8 +31,8 @@ class GoodKinesis extends Stream.Writable {
         return;
       }
 
-      if (data.StreamDescriptionSummary.StreamStatus != 'ACTIVE' &&
-          data.StreamDescriptionSummary.StreamStatus != 'UPDATING') {
+      if (data.StreamDescriptionSummary.StreamStatus !== 'ACTIVE'
+          && data.StreamDescriptionSummary.StreamStatus !== 'UPDATING') {
         this.emit('error', new Error('Kinesis stream is not in status ACTIVE or UPDATING'));
       }
     });
@@ -50,9 +48,9 @@ class GoodKinesis extends Stream.Writable {
       const params = {
         StreamName: this.options.streamName,
         PartitionKey: buf.toString('hex'),
-        Data: serialize(data)
+        Data: serialize(data),
       };
-      this.client.putRecord(params, callback)
+      this.client.putRecord(params, callback);
     });
   }
 }
@@ -73,7 +71,7 @@ class GoodFirehose extends Stream.Writable {
         return;
       }
 
-      if (data.DeliveryStreamDescription.DeliveryStreamStatus != 'ACTIVE') {
+      if (data.DeliveryStreamDescription.DeliveryStreamStatus !== 'ACTIVE') {
         this.emit('error', new Error('Delivery stream is not in status ACTIVE'));
       }
     });
@@ -83,15 +81,24 @@ class GoodFirehose extends Stream.Writable {
     const params = {
       DeliveryStreamName: this.options.streamName,
       Record: {
-        Data: serialize(data)
-      }
+        Data: serialize(data),
+      },
     };
 
-    this.client.putRecord(params, callback)
+    this.client.putRecord(params, callback);
+  }
+
+  _writev(chunks, callback) {
+    const params = {
+      DeliveryStreamName: this.options.streamName,
+      Records: chunks.map(chunk => ({ Data: serialize(chunk) })),
+    };
+
+    this.client.putRecordBatch(params, callback);
   }
 }
 
 module.exports = {
-  'Kinesis': GoodKinesis,
-  'Firehose': GoodFirehose,
+  Kinesis: GoodKinesis,
+  Firehose: GoodFirehose,
 };

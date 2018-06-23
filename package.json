@@ -25,5 +25,10 @@
   "dependencies": {
     "aws-sdk": "^2.263.1",
     "fast-safe-stringify": "^2.0.4"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-plugin-import": "^2.12.0"
   }
 }
