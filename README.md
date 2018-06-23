@@ -60,6 +60,7 @@ const goodkinesis = require('good-kinesis-reporter');
 
 const kinesisStream = goodkinesis.Kinesis({ streamName: 'my-kinesis-stream' });
 const firehoseStream = goodkinesis.Firehose({ streamName: 'my-firehose-stream' });
+```
 
 Available options:
 
