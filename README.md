@@ -1,12 +1,15 @@
 # good-kinesis-reporter
 
-Kinesis and Kinesis firehose stream for Good by Hapi.js
+Kinesis and Kinesis firehose stream for [good](https://github.com/hapijs/good) by [hapi](https://github.com/hapijs/hapi)
 
-![Current Version](https://img.shields.io/npm/v/good-kinesis-reporter.svg)
+[![Current Version](https://img.shields.io/npm/v/good-kinesis-reporter.svg)](https://www.npmjs.com/package/good-kinesis-reporter)
+[![Build Status](https://travis-ci.org/vvondra/good-kinesis-reporter.svg?branch=master)](https://travis-ci.org/vvondra/good-kinesis-reporter)
 
 ## Usage
 
 `good-kinesis-reporter` is a write stream use to send events to AWS Kinesis and AWS Kinesis Firehose.
+
+Kinesis Firehose has become one of the preferred ways for me to transport logs from containers and servers in an AWS environment to Elasticsearch, skipping Logstash and its overhead altogether.
 
 ### Example
 
