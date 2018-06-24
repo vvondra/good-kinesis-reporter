@@ -23,7 +23,7 @@ describe('GoodKinesisReporter', () => {
       const putRecordSpy = sinon.stub().yields(null, 'ok');
 
       AWS.mock('Kinesis', 'describeStreamSummary', summaryResponse);
-      AWS.mock('Kinesis', 'putRecord', putRecordSpy);
+      AWS.mock('Kinesis', 'putRecords', putRecordSpy);
       const kinesisStream = new goodkinesis.Kinesis({ streamName: 'vojtech-testing', region: 'eu-west-1' });
 
       const readable = StreamTest.v2.fromObjects([
@@ -35,15 +35,18 @@ describe('GoodKinesisReporter', () => {
       readable.pipe(kinesisStream);
       readable.on('end', () => {
         for (let i = 1; i < 4; i += 1) {
-          sinon.assert.calledWithMatch(
+          sinon.assert.calledWith(
             putRecordSpy,
-            {
-              Data: `{"id":${i},"text":"test write"}\n`,
-            },
+            sinon.match.has(
+              'Records',
+              sinon.match(
+                records => records.some(record => record.Data === `{"id":${i},"text":"test write"}\n`),
+              ),
+            ),
           );
         }
 
-        assert.ok(putRecordSpy.calledThrice, 'should put records twice to Kinesis');
+        assert.ok(putRecordSpy.calledOnce, 'should put batched records to Kinesis');
         done();
       });
     });
@@ -84,12 +87,11 @@ describe('GoodKinesisReporter', () => {
 
       const readable = StreamTest.v2.fromObjects([
         { id: 1, text: 'test write' },
-        JSON.stringify({ id: 2, text: 'test write' }),
       ]);
 
       readable.pipe(kinesisStream);
       readable.on('end', () => {
-        assert.ok(putRecordSpy.calledTwice, 'should put records twice to Firehose');
+        assert.ok(putRecordSpy.calledOnce, 'should put record to Firehose');
         done();
       });
     });
