@@ -26,6 +26,9 @@
     "aws-sdk": "^2.263.1",
     "fast-safe-stringify": "^2.0.4"
   },
+  "engines": {
+    "node": ">=8"
+  },
   "devDependencies": {
     "aws-sdk-mock": "^4.0.0",
     "eslint": "^4.19.1",
