@@ -17,15 +17,18 @@ Kinesis Firehose has become one of the preferred ways for me to transport logs f
 // server.js
 
 const Hapi = require('hapi');
-const server = new Hapi.Server();
-server.connection();
+
+const server = Hapi.server({
+    port: 3000,
+    host: 'localhost'
+});
 
 const options = {
     reporters: {
         kinesis: [{
             module: 'good-squeeze',
             name: 'Squeeze',
-            args: [{ log: '*' }]
+            args: [{ log: '*', response: '*', request: '*', server: '*' }]
         }, {
             module: 'good-kinesis-reporter',
             name: 'Firehose', // can be either Kinesis or Firehose
@@ -38,10 +41,9 @@ const options = {
 
 const init = async () => {
     await server.register({
-        register: require('good'),
-        options
+        plugin: require('good'),
+        options,
     });
-
     await server.start();
     console.log(`Server running at: ${server.info.uri}`);
 };
