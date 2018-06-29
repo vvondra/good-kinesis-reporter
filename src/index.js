@@ -18,7 +18,17 @@ function serialize(data) {
     return data.toString('utf8');
   }
 
-  return `${stringify(data)}\n`;
+  const payload = Object.assign({}, data);
+  // Add Kibana/Logstash compatible timestamp
+  if (!payload['@timestamp']) {
+    if (payload.timestamp) {
+      payload['@timestamp'] = new Date(payload.timestamp).toISOString();
+    } else {
+      payload['@timestamp'] = new Date().toISOString();
+    }
+  }
+
+  return `${stringify(payload)}\n`;
 }
 
 class GoodKinesis extends Stream.Writable {

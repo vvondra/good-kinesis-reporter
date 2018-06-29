@@ -40,7 +40,7 @@ describe('GoodKinesisReporter', () => {
             sinon.match.has(
               'Records',
               sinon.match(
-                records => records.some(record => record.Data === `{"id":${i},"text":"test write"}\n`),
+                records => records.some(record => record.Data.indexOf(`"id":${i},"text":"test write"`) !== -1),
               ),
             ),
           );
